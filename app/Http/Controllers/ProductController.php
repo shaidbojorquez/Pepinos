@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Product;
 use Illuminate\Http\Request;
+use App\Http\Requests\ProductRequest;
 
 class ProductController extends Controller
 {
@@ -37,8 +38,8 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(ProductRequest $request)
+    {   
         $product = Product::create($request->all());    
 
         // if (request()->ajax()) {
@@ -79,7 +80,7 @@ class ProductController extends Controller
      * @param  \App\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+    public function update(ProductRequest $request, Product $product)
     {
         $product->fill($request->all());
         $product->save();
@@ -99,7 +100,7 @@ class ProductController extends Controller
         $product->delete();
 
       //  if (request()->json()) {
-            return response()->json($product,201);
+            return response()->json($product,204);
        // }
     }
 }
