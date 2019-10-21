@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Product;
+use App\Http\Resources\Product as ProductResource;
+use App\Http\Resources\ProductCollection;
 use Illuminate\Http\Request;
 use App\Http\Requests\ProductRequest;
 
@@ -15,9 +17,9 @@ class ProductController extends Controller
      */
     public function list()
     {
-        $products = Product::all();
+        $products = ProductResource::collection(Product::all());
 
-        return response()->json($products,200);
+        return $products;
         
         # return view('product.index')->with('products', $product);
     }
@@ -40,10 +42,13 @@ class ProductController extends Controller
      */
     public function store(ProductRequest $request)
     {   
-        $product = Product::create($request->all());    
+        $product = new ProductResource( Product::create([
+            "name" => $request->input('data.attributes.name'),
+            "price" => $request->input('data.attributes.price')
+        ]) );
 
         // if (request()->ajax()) {
-        return response()->json($product,201);
+        return $product;
         // }
 
         // return redirect()->to(route('product.index'))->with('status', 'success');
@@ -57,8 +62,9 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
+        return new ProductResource($product);
       //  if (request()->ajax()) {
-        return response()->json($product,200);
+        //return response()->json(new ProductResource($product), 200);
        // }
     }
 
@@ -82,10 +88,13 @@ class ProductController extends Controller
      */
     public function update(ProductRequest $request, Product $product)
     {
-        $product->fill($request->all());
+        $product->fill([
+            "name" => $request->input('data.attributes.name'),
+            "price" => $request->input('data.attributes.price')
+        ]);
         $product->save();
         // if (request()->ajax()) {
-        return response()->json($product,200);
+        return new ProductResource($product);
         // }
     }
 
@@ -100,7 +109,7 @@ class ProductController extends Controller
         $product->delete();
 
       //  if (request()->json()) {
-            return response()->json($product,204);
+            return new ProductResource($product);
        // }
     }
 }

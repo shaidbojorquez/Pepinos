@@ -37,15 +37,15 @@ class ProductRequest extends FormRequest
             case 'POST':
             {
                 return [
-                    'name' => 'max:100|required',
-                    'price' => 'required|numeric|gt:0'
+                    'data.attributes.name' => 'max:100|required',
+                    'data.attributes.price' => 'required|numeric|gt:0'
                 ];
             }
             case 'PUT': 
             case 'PATCH':
             {
                 return[
-                    'price' => 'required|numeric|gt:0'
+                    'data.attributes.price' => 'required|numeric|gt:0'
                 ];
             }
             
